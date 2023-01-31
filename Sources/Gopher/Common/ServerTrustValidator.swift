@@ -180,10 +180,9 @@ extension ServerTrustValidator
     private func extractPublicKeyFromServerTrust(serverTrust: SecTrust) -> Result<SecKey, ServerTrustError>
     {
         let certificateCount = SecTrustGetCertificateCount(serverTrust)
-        let certIndex = 0
         let result: Result<SecKey, ServerTrustError>
 
-        if certificateCount > 0
+        if certificateCount > .zero
         {
             if let certChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
                let cert = certChain.first
@@ -221,20 +220,14 @@ extension ServerTrustValidator
         var certEvaluateError: CFError?
         let certEvaluateResult = SecTrustEvaluateWithError(certAllowed, &certEvaluateError)
 
-        if certEvaluateError != nil
+        if !certEvaluateResult,
+           let publicKey = SecTrustCopyKey(certAllowed)
         {
-            result = Result.failure(ServerTrustError.couldNotEvaluateCertificate)
+            result = Result.success(publicKey)
         }
         else
         {
-            if let publicKey = SecTrustCopyKey(certAllowed)
-            {
-                result = Result.success(publicKey)
-            }
-            else
-            {
-                result = Result.failure(ServerTrustError.couldNotEvaluateCertificate)
-            }
+            result = Result.failure(ServerTrustError.couldNotEvaluateCertificate)
         }
 
         return result
