@@ -14,7 +14,7 @@ import Foundation
 /// can be used for quickly getting up and running, when no
 /// customization is desired or needed.
 ///
-/// Once passed to an object that is confirming to the
+/// Once passed to an object that is conforming to the
 /// `NetworkSession` protocol, it is used to create the low
 /// level HTTP request that is transmitted to the remote
 /// service.
