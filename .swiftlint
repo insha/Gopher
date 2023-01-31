@@ -1,13 +1,14 @@
 excluded:
+  - DerivedData
   - Documentation
+  - Scripts
 
 disabled_rules:
-  - switch_case_alignment
   - opening_brace
+  - trailing_comma
   - closing_brace
-  - discarded_notification_center_observer
   - statement_position
-  - multiple_closures_with_trailing_closure
+  - switch_case_alignment
 
 opt_in_rules:
   - anyobject_protocol
@@ -21,13 +22,21 @@ opt_in_rules:
   - private_action
   - private_outlet
   - sorted_imports
+
+analyzer_rules:
   - unused_import
 
+void_function_in_ternary:
+ severity: error
+first_where:
+ severity: error
 force_unwrapping:
   severity: error
 private_outlet:
   severity: error
 private_action:
+  severity: error
+multiple_closures_with_trailing_closure:
   severity: error
 notification_center_detachment:
   severity: error
@@ -67,8 +76,8 @@ file_length:
   error: 600
 
 line_length:
-    warning: 150
-    error: 170
+    warning: 170
+    error: 180
     ignores_comments: true
 
 type_body_length:
@@ -78,12 +87,13 @@ type_body_length:
 type_name:
   allowed_symbols: ["_"]
   max_length:
-    warning: 30
-    error: 40
+    warning: 50
+    error: 60
 
 identifier_name:
   allowed_symbols: ["_"]
-  excluded: ["id"]
+  excluded: ["id", "iv", "ok"]
+  severity: error
 
 function_body_length:
   warning: 100

@@ -1,16 +1,17 @@
-# file options
-
---exclude Documentation
-
 # format options
 
---allman true
---elseposition next-line
---guardelse next-line
+--exclude DerivedData, Documentation, Scripts
+
+--disable redundantType
+
 --indent 4
---semicolons never
+--allman true 
+--elseposition next-line
+--indentcase true
+--patternlet inline
+--semicolons never 
 --shortoptionals always
 --stripunusedargs always
 --trimwhitespace always
 --wraparguments after-first
---wrapcollections after-first
+--wrapcollections before-first
