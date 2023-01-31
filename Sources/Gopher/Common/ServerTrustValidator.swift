@@ -1,6 +1,6 @@
 //
 //  ServerTrustValidator.swift
-//  
+//
 //  See LICENSE for more details.
 //  Copyright © 2016-2022 Farhan Ahmed. All rights reserved.
 //
@@ -210,7 +210,7 @@ extension ServerTrustValidator
         let certCreateStatus = SecTrustCreateWithCertificates(certificate, policy, &allowedCert)
 
         guard let certAllowed = allowedCert,
-            certCreateStatus == errSecSuccess
+              certCreateStatus == errSecSuccess
         else
         {
             return Result.failure(ServerTrustError.couldNotEvaluateCertificate)

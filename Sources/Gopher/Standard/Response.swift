@@ -1,6 +1,6 @@
 //
 //  Response.swift
-//  
+//
 //  See LICENSE for more details.
 //  Copyright © 2016-2022 Farhan Ahmed. All rights reserved.
 //
@@ -19,9 +19,9 @@ struct Response: NetworkResponse
          response: HTTPURLResponse,
          error: NetworkError? = nil)
     {
-        self.requestIdentifier = identifier
+        requestIdentifier = identifier
         self.response = response
         self.error = error
-        self.contents = data
+        contents = data
     }
 }

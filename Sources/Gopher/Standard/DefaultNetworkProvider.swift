@@ -1,13 +1,13 @@
 //
 //  DefaultNetworkProvider.swift
-//  
+//
 //  See LICENSE for more details.
 //  Copyright © 2016-2022 Farhan Ahmed. All rights reserved.
 //
 
 import Foundation
 
-protocol NetworkProviderDelegate {}
+protocol NetworkProviderDelegate: AnyObject {}
 
 public final class DefaultNetworkProvider: NSObject
 {
@@ -24,7 +24,6 @@ public final class DefaultNetworkProvider: NSObject
          trustValidator: ServerTrustValidator? = nil,
          trustHandler: GopherTrustHandler? = nil)
     {
-
         providerDelegate = delegate
         serverTrustValidator = trustValidator
         serverTrustHandler = trustHandler

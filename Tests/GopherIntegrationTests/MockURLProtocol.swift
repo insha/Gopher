@@ -1,6 +1,6 @@
 //
 //  MockURLProtocol.swift
-//  
+//
 //  See LICENSE for more details.
 //  Copyright © 2016-2022 Farhan Ahmed. All rights reserved.
 //
@@ -12,17 +12,21 @@ final class MockURLProtocol: URLProtocol
 {
     static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
 
-    override class func canInit(with request: URLRequest) -> Bool {
+    override class func canInit(with _: URLRequest) -> Bool
+    {
         true
     }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest
+    {
         request
     }
 
-    override func startLoading() {
+    override func startLoading()
+    {
         guard let handler = MockURLProtocol.requestHandler
-        else {
+        else
+        {
             XCTFail("Received unexpected request with no handler set")
 
             return

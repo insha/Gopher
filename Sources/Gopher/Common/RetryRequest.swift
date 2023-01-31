@@ -1,6 +1,6 @@
 //
 //  RetryRequest.swift
-//  
+//
 //  See LICENSE for more details.
 //  Copyright © 2016-2022 Farhan Ahmed. All rights reserved.
 //
@@ -15,7 +15,7 @@ import Foundation
 final class RetryRequest
 {
     public typealias RetryBlock = () -> Void
-    
+
     public var retryDelay: TimeInterval = 3
     public var maximumRetries = 5
 

@@ -1,6 +1,6 @@
 //
 //  NetworkUtility.swift
-//  
+//
 //  See LICENSE for more details.
 //  Copyright © 2016-2022 Farhan Ahmed. All rights reserved.
 //
@@ -95,7 +95,8 @@ public enum NetworkUtility
     {
         var prepData: Data?
 
-        guard let payload = dict else
+        guard let payload = dict
+        else
         {
             return prepData
         }

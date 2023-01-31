@@ -45,14 +45,14 @@ public final class RequestBuilder
 
     public func parameter(_ key: String, value: Any) -> Self
     {
-        self.parameters[key] = value
+        parameters[key] = value
 
         return self
     }
 
     public func header(_ key: Header, value: String) -> Self
     {
-        self.headers[key.rawValue] = value
+        headers[key.rawValue] = value
 
         return self
     }
@@ -71,7 +71,7 @@ public final class RequestBuilder
         {
             fatalError("An endpoint for a resource cannot be empty.")
         }
-        
+
         let request = Request(endpoint: endpoint,
                               method: method,
                               headers: headers,

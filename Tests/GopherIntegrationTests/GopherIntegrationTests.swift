@@ -5,8 +5,8 @@
 //  Copyright © 2016-2022 Farhan Ahmed. All rights reserved.
 //
 
-import XCTest
 @testable import Gopher
+import XCTest
 
 final class GopherIntegrationTests: XCTestCase
 {
@@ -39,8 +39,8 @@ final class GopherIntegrationTests: XCTestCase
         let sample = Profile(name: "Farhan")
         let mockData = try JSONEncoder().encode(sample)
 
-        MockURLProtocol.requestHandler = { request in
-            return (HTTPURLResponse(), mockData)
+        MockURLProtocol.requestHandler = { _ in
+            (HTTPURLResponse(), mockData)
         }
 
         // Test

@@ -29,6 +29,7 @@ public final class Gopher: NetworkSession
     public let settings: Configuration
 
     // MARK: - Lifecycle
+
     public init(provider: NetworkProvider, configuration: Configuration)
     {
         session = provider
@@ -83,12 +84,14 @@ public final class Gopher: NetworkSession
     }
 
     // MARK: - Helpers
+
     private func prepareServiceResponse(requestID: String,
                                         data: Data,
                                         response: URLResponse?,
                                         originalError: Error?) throws -> NetworkResponse
     {
-        guard let receivedResponse = response else
+        guard let receivedResponse = response
+        else
         {
             if let receivedError = originalError
             {
@@ -128,7 +131,7 @@ public final class Gopher: NetworkSession
 
     private func handleResponse(httpResponse: HTTPURLResponse, data: Data, requestID: String) throws -> NetworkResponse
     {
-        guard !(400..<600).contains(httpResponse.statusCode)
+        guard !(400 ..< 600).contains(httpResponse.statusCode)
         else
         {
             let errorKind: (kind: RequestError.ErrorKind, domain: String)
