@@ -8,9 +8,9 @@
 import Foundation
 import os
 
-struct ServerTrustValidator
+public struct ServerTrustValidator
 {
-    enum ValidationResult
+    public enum ValidationResult
     {
         case allowConnection
         case blockConnection
@@ -27,7 +27,7 @@ struct ServerTrustValidator
         case noCertificatesFound
     }
 
-    init(logger: Logger? = nil)
+    public init(logger: Logger? = nil)
     {
         if let logger = logger
         {

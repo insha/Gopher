@@ -45,7 +45,7 @@ final class GopherIntegrationTests: XCTestCase
 
         // Test
         let request = RequestBuilder()
-            .forResource("/")
+            .resource("/")
             .using(.get)
             .header(Header.contentType, value: MimeType.json)
             .build()

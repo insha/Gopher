@@ -9,7 +9,7 @@ import Foundation
 
 public protocol NetworkProvider
 {
-    func data(for request: URLRequest) async throws -> (Data, URLResponse)
+    func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
     func flush() async
     func invalidateAndCancel()
     func finishTasksAndInvalidate()

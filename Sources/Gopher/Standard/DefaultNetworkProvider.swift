@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol NetworkProviderDelegate: AnyObject {}
+public protocol NetworkProviderDelegate: AnyObject {}
 
 public final class DefaultNetworkProvider: NSObject
 {
@@ -19,10 +19,10 @@ public final class DefaultNetworkProvider: NSObject
     private var serverTrustHandler: GopherTrustHandler?
     private var providerDelegate: NetworkProviderDelegate?
 
-    init(_ configuration: URLSessionConfiguration,
-         delegate: NetworkProviderDelegate? = nil,
-         trustValidator: ServerTrustValidator? = nil,
-         trustHandler: GopherTrustHandler? = nil)
+    public init(_ configuration: URLSessionConfiguration,
+                delegate: NetworkProviderDelegate? = nil,
+                trustValidator: ServerTrustValidator? = nil,
+                trustHandler: GopherTrustHandler? = nil)
     {
         providerDelegate = delegate
         serverTrustValidator = trustValidator
@@ -44,9 +44,10 @@ public final class DefaultNetworkProvider: NSObject
 
 extension DefaultNetworkProvider: NetworkProvider
 {
-    public func data(for request: URLRequest) async throws -> (Data, URLResponse)
+    public func data(for request: URLRequest,
+                     delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse)
     {
-        try await session.data(for: request)
+        try await session.data(for: request, delegate: delegate)
     }
 
     public func flush() async

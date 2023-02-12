@@ -16,6 +16,8 @@ public protocol NetworkRequest
     var url: URL? { get }
     var parameters: GopherContent { get }
     var headers: GopherHeader { get }
+    var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy { get }
+    var kind: NetworkRequestKind { get }
 }
 
 public extension NetworkRequest
@@ -31,4 +33,20 @@ public extension NetworkRequest
             return .json
         }
     }
+
+    var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy
+    {
+        return .iso8601
+    }
+
+    var kind: NetworkRequestKind
+    {
+        return .data
+    }
+}
+
+public enum NetworkRequestKind
+{
+    case data
+    case download
 }

@@ -29,6 +29,7 @@ public extension NetworkError
         Kind   : \(kind)
         Message: \(message)
         URL    : \(relatedURL?.absoluteString ?? "Not applicable")
+        Params : \(relatedURL?.query ?? "Not applicable")
         """
     }
 }

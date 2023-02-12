@@ -13,7 +13,6 @@ public final class RequestBuilder
     private var identifier: String
     private var method: HTTPMethod
     private var endpoint: String
-    private var url: URL?
     private var timeout: TimeInterval
     private var parameters: GopherContent
     private var headers: GopherHeader
@@ -29,7 +28,7 @@ public final class RequestBuilder
         name = "[\(method.rawValue.uppercased())] \(endpoint.lowercased())"
     }
 
-    public func forResource(_ endpoint: String) -> Self
+    public func resource(_ endpoint: String) -> Self
     {
         self.endpoint = endpoint
 
@@ -50,9 +49,35 @@ public final class RequestBuilder
         return self
     }
 
+    public func parameters(_ value: GopherContent) -> Self
+    {
+        guard !value.isEmpty
+        else
+        {
+            return self
+        }
+
+        parameters = value
+
+        return self
+    }
+
     public func header(_ key: Header, value: String) -> Self
     {
         headers[key.rawValue] = value
+
+        return self
+    }
+
+    public func custom_header(_ key: String, value: String) -> Self
+    {
+        guard !key.isEmpty
+        else
+        {
+            return self
+        }
+
+        headers[key] = value
 
         return self
     }

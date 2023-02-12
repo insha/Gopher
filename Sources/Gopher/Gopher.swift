@@ -73,14 +73,18 @@ public final class Gopher: NetworkSession
     public func send<Model>(request: NetworkRequest) async throws -> Model where Model: Codable
     {
         let outgoingRequest = try NetworkUtility.buildRequest(serviceRequest: request, baseURL: settings.baseURL)
-        let (data, urlResponse) = try await session.data(for: outgoingRequest)
+        let (data, urlResponse) = try await session.data(for: outgoingRequest, delegate: nil)
 
         let response = try prepareServiceResponse(requestID: request.identifier,
                                                   data: data,
                                                   response: urlResponse,
                                                   originalError: nil)
 
-        return try JSONDecoder().decode(Model.self, from: response.contents)
+        let decoder = JSONDecoder()
+
+        decoder.dateDecodingStrategy = request.dateDecodingStrategy
+
+        return try decoder.decode(Model.self, from: response.contents)
     }
 
     // MARK: - Helpers
@@ -197,4 +201,16 @@ public final class Gopher: NetworkSession
                             url: url,
                             domain: error.domain)
     }
+}
+
+extension DateFormatter
+{
+    static let iso8601_short_date: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter
+    }()
 }
