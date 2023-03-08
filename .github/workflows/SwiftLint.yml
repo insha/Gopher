@@ -17,5 +17,4 @@ jobs:
         env:
           DIFF_BASE: ${{ github.base_ref }}
         with:
-          swiftlint-version: '5.7'
           swiftlint-args: --config .swiftlint
