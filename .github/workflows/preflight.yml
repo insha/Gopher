@@ -18,11 +18,21 @@ jobs:
     
     steps:
       - name: Checkout Git Repository
-        uses: actions/checkout@2
+        uses: actions/checkout@v2
       
-      - name: Active Linters
-        uses: wearerequired/lint-action@2.3.0
+      - name: Lint Action
+        # You may pin to the exact commit or the version.
+        # uses: wearerequired/lint-action@548d8a7c4b04d3553d32ed5b6e91eb171e10e7bb
+        uses: wearerequired/lint-action@v2.3.0
         with:
-          swift_format_lockwood: true
-          swiftlint: true
           continue_on_error: false
+          # Enable or disable SwiftFormat checks
+          swift_format_lockwood: true
+          # Additional arguments to pass to the linter
+          swift_format_lockwood_args: --config .swiftformat
+          # Enable or disable SwiftLint checks
+          swiftlint: true
+          # Additional arguments to pass to the linter
+          swiftlint_args: --config .swiftlint
+          # Directory where the SwiftLint command should be run
+          #swiftlint_dir: # optional
