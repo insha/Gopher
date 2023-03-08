@@ -1,13 +1,11 @@
 name: Preflight
 
 on:
-  push:
-    branches:
-      - main
-    
-    pull_request:
-      branches:
-        - main
+  pull_request:
+    paths:
+      - '.github/workflows/swiftlint.yml'
+      - '.swiftlint'
+      - '**/*.swift'
 
 permissions:
   checks: write
