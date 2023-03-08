@@ -1,0 +1,30 @@
+name: Preflight
+
+on:
+  push:
+    branches:
+      - main
+    
+    pull_request:
+      branches:
+        - main
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+  run-linters:
+    name: Run Linters
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Git Repository
+        uses: actions/checkout@2
+      
+      - name: Active Linters
+        uses: wearerequired/lint-action@2.3.0
+        with:
+          swift_format_lockwood: true
+          swiftlint: true
+          continue_on_error: false
