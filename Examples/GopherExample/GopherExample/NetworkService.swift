@@ -21,7 +21,7 @@ final class NetworkService
 
     func invoke<Model>(resource: TheMovieDatabase,
                        resource_id: String = DefaultValue.empty_string,
-                       parameters: GopherContent = [:]) async throws -> Model where Model: Codable
+                       parameters: GopherQueryParameter = []) async throws -> Model where Model: Codable
     {
         return try await service.send(request: resource.request(resource_id: resource_id, parameters: parameters))
     }
@@ -156,7 +156,7 @@ extension NetworkService
             return endpoint
         }
 
-        func request(resource_id: String = DefaultValue.empty_string, parameters: GopherContent = [:]) -> Request
+        func request(resource_id: String = DefaultValue.empty_string, parameters: GopherQueryParameter = []) -> Request
         {
             let resource = prepare_resource(resource_id)
             let reqBuilder = RequestBuilder()
@@ -165,6 +165,7 @@ extension NetworkService
                 .parameters(parameters)
                 .parameter(Header.api_key, value: Self.api_key)
                 .parameter(Header.language, value: Locale.current.identifier)
+                .date_decoding(.formatted(DateFormatter.iso8601_short_date))
 
             return reqBuilder.build()
         }
@@ -174,4 +175,16 @@ extension NetworkService
 enum DefaultValue
 {
     static let empty_string = ""
+}
+
+extension DateFormatter
+{
+    static let iso8601_short_date: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter
+    }()
 }

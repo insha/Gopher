@@ -51,27 +51,25 @@ public enum NetworkUtility
 
         request.httpMethod = serviceRequest.method.rawValue
 
-        if serviceRequest.method == HTTPMethod.get
+        if !serviceRequest.parameters.isEmpty
         {
-            if !serviceRequest.parameters.isEmpty
-            {
-                components.queryItems = serviceRequest.parameters.map { URLQueryItem(name: $0, value: "\($1)") }
+            components.queryItems = serviceRequest.parameters
 
-                request.url = components.url
-            }
-            else
-            {
-                // Nothing else needs to be done.
-            }
+            request.url = components.url
         }
         else
+        {
+            // Nothing else needs to be done.
+        }
+
+        if serviceRequest.method != HTTPMethod.get
         {
             switch serviceRequest.dataFormat
             {
                 case .json:
-                    request.httpBody = dataFromDictionary(dict: serviceRequest.parameters)
+                    request.httpBody = dataFromDictionary(dict: serviceRequest.body)
                 case .form:
-                    request.httpBody = generateFormData(parameters: serviceRequest.parameters)
+                    request.httpBody = generateFormData(parameters: serviceRequest.body)
             }
 
             debugPrint("-> Request body format: \(serviceRequest.dataFormat)")

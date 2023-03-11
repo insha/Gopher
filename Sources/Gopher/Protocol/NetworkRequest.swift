@@ -14,8 +14,9 @@ public protocol NetworkRequest
     var timeout: TimeInterval { get }
     var endpoint: String { get }
     var url: URL? { get }
-    var parameters: GopherContent { get }
+    var parameters: GopherQueryParameter { get }
     var headers: GopherHeader { get }
+    var body: GopherContent { get }
     var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy { get }
     var kind: NetworkRequestKind { get }
 }
