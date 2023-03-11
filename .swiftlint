@@ -2,6 +2,7 @@ excluded:
   - DerivedData
   - Documentation
   - Scripts
+  - Package.swift
 
 disabled_rules:
   - opening_brace

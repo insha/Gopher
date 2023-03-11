@@ -1,6 +1,6 @@
 # format options
 
---exclude DerivedData, Documentation, Scripts
+--exclude DerivedData, Documentation, Scripts, Package.swift
 
 --disable redundantType
 
