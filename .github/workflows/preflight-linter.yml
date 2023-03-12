@@ -1,0 +1,32 @@
+name: Preflight Code Lint
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on: pull_request
+
+jobs:
+  Preflight-Linter:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Linting
+        id: step_one
+        run: |
+          echo "--> Source: ${{ github.head_ref }} (${{ github.event.pull_request.base.sha }})"
+          echo "--> Target: ${{ github.base_ref }} (${{ github.event.pull_request.head.sha }})"
+          
+          # Fetching base ref
+          git fetch --prune --no-tags --depth=1 origin +refs/heads/${{ github.base_ref }}:refs/heads/${{ github.base_ref }}
+          
+          against=${{ github.event.pull_request.base.sha }}          
+          
+          changed_files=$(git --no-pager diff-index --cached --diff-filter=ACMR --name-only --relative $against -- '*.swift')
+          
+          if [ -z "$changed_files" ]
+          then
+            echo "No code files changes were found"
+            exit 0
+          else
+            echo "-> $changed_files"
+            
+            swiftlint lint --config .swiftlint --reporter "github-actions-logging" "$@" -- $changed_files 
+          fi

@@ -89,11 +89,11 @@ extension DownloadQueue
     {
         enum Status
         {
-            case queued
-            case in_progress
-            case completed(local_url: URL)
-            case paused
-            case failed(error: Swift.Error)
+            case Queued
+            case In_progress
+            case Completed(local_url: URL)
+            case Paused
+            case Failed(error: Swift.Error)
         }
 
         enum Error: Swift.Error

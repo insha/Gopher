@@ -8,26 +8,22 @@
 import Foundation
 import Gopher
 
-final class NetworkService
-{
+final class NetworkService {
     private let service: Gopher
     private var download_queue: DownloadQueue
 
-    init(service: Gopher)
-    {
+    init(service: Gopher) {
         self.service = service
         self.download_queue = DownloadQueue()
     }
 
     func invoke<Model>(resource: TheMovieDatabase,
                        resource_id: String = DefaultValue.empty_string,
-                       parameters: GopherContent = [:]) async throws -> Model where Model: Codable
-    {
+                       parameters: GopherContent = [:]) async throws -> Model where Model: Codable {
         return try await service.send(request: resource.request(resource_id: resource_id, parameters: parameters))
     }
 
-    func enqueue(url: URL)
-    {
+    func enqueue(url: URL) {
         download_queue.add(url: url)
     }
 }
@@ -36,7 +32,7 @@ final class NetworkService
 
 extension NetworkService
 {
-    enum TheMovieDatabase
+    enum theMovieDatabase
     {
         static let host = "https://api.themoviedb.org/3/"
 
@@ -48,12 +44,12 @@ extension NetworkService
             static let language = "language"
         }
 
-        case auth_temp_token
-        case auth_new_session
-        case authenticate
-        case popular
-        case popular_persons
-        case topRated
+        case Auth_temp_token
+        case Auth_new_session
+        case Authenticate
+        case Popular
+        case Popular_persons
+        case TopRated
         case upcoming
         case nowPlaying
         case trending

@@ -1,0 +1,33 @@
+name: Preflight Code Format
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on: pull_request
+
+jobs:
+  Preflight-Formatter:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checking Code Format
+        id: step_one
+        run: |
+          echo "-> Source: ${{ github.head_ref }} (${{ github.event.pull_request.head.sha }})"
+          echo "-> Target: ${{ github.base_ref }} (${{ github.event.pull_request.base.sha }})"
+          
+          # Fetching base ref
+          git fetch --prune --no-tags --depth=1 origin +refs/heads/${{ github.base_ref }}:refs/heads/${{ github.base_ref }}
+          
+          against=${{ github.event.pull_request.base.sha }}
+          changed_files=$(git --no-pager diff-index --cached --diff-filter=ACMR --name-only --relative $against -- '*.swift')
+          
+          if [ -z "$changed_files" ]
+          then
+            echo "No code file changes were found"
+            exit 0
+          else
+            modified_file_list="${{ github.workspace }}/modified_file_list"
+            
+            echo "$changed_files" > $modified_file_list
+            
+            swiftformat --filelist "$modified_file_list" --lint --config .swiftformat --swiftversion 5 --reporter github-actions-log
+          fi

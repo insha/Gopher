@@ -14,16 +14,14 @@ final class MovieInfoProvider: ObservableObject
 
     private let service: NetworkService
 
-    init(service: NetworkService)
-    {
+    init(service: NetworkService) {
         self.service = service
     }
 }
 
 extension MovieInfoProvider
 {
-    func popular() async throws
-    {
+    func popular() async throws {
         let result: MovieResult = try await service.invoke(resource: .popular)
 
         DispatchQueue.main.async {
@@ -39,9 +37,9 @@ struct MovieResult: Codable
 
 struct Movie: Codable, Hashable, Identifiable
 {
-    let id: Int
-    let title: String
-    let poster_path: URL
+    let Id: Int
+    let Title: String
+    let Poster_path: URL
     let adult: Bool
     let overview: String
     let release_date: Date
