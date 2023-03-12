@@ -1,0 +1,66 @@
+name: Preflight Check
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on: pull_request
+
+jobs:
+  Preflight-Check:
+    runs-on: self-hosted
+    outputs:
+      output1: ${{ steps.step_one.outputs.patch}}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check files
+        id: step_one
+        run: |
+          echo "--> ${{ github.base_ref}}"
+          echo "--> ${{ github.head_ref}}"
+          echo "--> $HEAD"
+          
+          FILE_EXTS=".swift"
+          PARSE_EXTS=true
+          
+          if git rev-parse --verify $GITHUB_BASE_REF >/dev/null 2>&1 ; then
+              against=$(git rev-parse $GITHUB_BASE_REF)
+          else
+              # Initial commit: diff against an empty tree object
+              against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+          fi
+          
+          echo "--> $against"
+          
+          prefix="pre-commit-swiftformat"
+          suffix="$(date +%C%y-%m-%d_%Hh%Mm%Ss)"
+          patch="$prefix-$suffix.patch"
+          
+          matches_extension() {
+              local filename="$(basename -- "$1")"
+              local extension=".${filename##*.}"
+              local ext
+
+              for ext in $FILE_EXTS; do [ "$ext" = "$extension" ] && return 0; done
+
+              return 1
+          }
+          
+          git diff-index --cached --diff-filter=ACMR --name-only $against -- | \
+          sed -e 's/^"\(.*\)"$/\1/' | \
+          while read file
+          do
+              if $PARSE_EXTS && ! matches_extension "$file"; then
+                  continue;
+              fi
+
+              file_escaped_source=$(printf "%s" "$file" | sed -e 's/[\*[|]/\\&/g')
+              file_escaped_target=$(printf "%s" "$file" | sed -e 's/[\"]/\\&/g' -e 's/[\&|]/\\&/g')
+              
+              cat "$file" | "$SWIFTFORMAT" --config "$CONFIG" --swiftversion "$SWIFT_VERSION" | \
+                  diff -u -- "$file" - | \
+                  sed -e "1s|--- $file_escaped_source|--- \"a/$file_escaped_target\"|" -e "2s|+++ -|+++ \"b/$file_escaped_target\"|" >> "$patch"
+          done
+          
+          echo "patch=$(cat patch)" >> $GITHUB_OUTPUT
+      - name: Check for available changes
+        id: step_two
+        run: |
+          echo "${{ steps.step_one.outputs.patch }}"
