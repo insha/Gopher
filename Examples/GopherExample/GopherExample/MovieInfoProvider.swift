@@ -24,9 +24,11 @@ extension MovieInfoProvider
 {
     func popular() async throws
     {
+        _ = URL(string: "https://road.to.nowhere")!
         let result: MovieResult = try await service.invoke(resource: .popular)
 
-        DispatchQueue.main.async {
+        DispatchQueue.main.async
+        {
             self.movies = result.results
         }
     }

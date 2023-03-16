@@ -11,7 +11,7 @@ final class DownloadQueue
 {
     enum Error: Swift.Error
     {
-        case empty
+        case Empty
     }
 
     var count: Int
@@ -21,7 +21,7 @@ final class DownloadQueue
 
     private var queue: [DownloadItem] = []
 
-    func add(url: URL, download_location: URL? = nil)
+    func add(url: URL, download_location _: URL? = nil)
     {
         queue.append(DownloadItem(url: url))
     }
@@ -33,7 +33,8 @@ final class DownloadQueue
 
     func clear()
     {
-        queue.forEach { item in
+        queue.forEach
+        { item in
             switch item.status
             {
                 case .in_progress:
@@ -154,7 +155,7 @@ extension DownloadQueue
             return url
         }
 
-        static private func imageFromFileSystem(for request: URLRequest) throws -> UIImage?
+        private static func imageFromFileSystem(for request: URLRequest) throws -> UIImage?
         {
             guard let url = fileName(for: request)
             else
@@ -167,7 +168,7 @@ extension DownloadQueue
             return UIImage(data: data)
         }
 
-        static private func fileName(for urlRequest: URLRequest) -> URL?
+        private static func fileName(for urlRequest: URLRequest) -> URL?
         {
             guard let fileName = urlRequest.url?.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
                   let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first

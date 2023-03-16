@@ -16,7 +16,7 @@ final class NetworkService
     init(service: Gopher)
     {
         self.service = service
-        self.download_queue = DownloadQueue()
+        download_queue = DownloadQueue()
     }
 
     func invoke<Model>(resource: TheMovieDatabase,
@@ -44,13 +44,13 @@ extension NetworkService
 
         private enum Header
         {
-            static let api_key  = "api_key"
+            static let api_key = "api_key"
             static let language = "language"
         }
 
-        case auth_temp_token
-        case auth_new_session
-        case authenticate
+        case Auth_temp_token
+        case Auth_new_session
+        case Authenticate
         case popular
         case popular_persons
         case topRated
@@ -139,7 +139,7 @@ extension NetworkService
             }
         }
 
-        static private func prepare_endpoint(with identifier: String = DefaultValue.empty_string,
+        private static func prepare_endpoint(with identifier: String = DefaultValue.empty_string,
                                              resource: String) -> String
         {
             let endpoint: String
