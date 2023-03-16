@@ -1,0 +1,40 @@
+name: Preflight Code Checks
+
+on: pull_request
+
+jobs:
+  Preflight-Code-Checks:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check for Changes
+        id: repo-fetch-changes
+        run: |
+          echo "-> Source: ${{ github.head_ref }} (${{ github.event.pull_request.head.sha }})"
+          echo "-> Target: ${{ github.base_ref }} (${{ github.event.pull_request.base.sha }})"
+          # Fetching base ref
+          git fetch --prune --no-tags --depth=1 origin +refs/heads/${{ github.base_ref }}:refs/heads/${{ github.base_ref }}
+ 
+          against=${{ github.event.pull_request.base.sha }}
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+ 
+          echo "changed_files<<$EOF" >> $GITHUB_ENV
+ 
+          changed_files=$(git --no-pager diff-index --cached --diff-filter=ACMR --name-only --relative $against -- '*.swift')
+ 
+          echo "$changed_files" >> $GITHUB_ENV
+          echo "$EOF" >> $GITHUB_ENV
+      - name: Code Format Validation
+        if: env.changed_files != ''
+        run: |
+          modified_file_list="${{ github.workspace }}/modified_file_list"
+ 
+          echo "${{ env.changed_files }}" > $modified_file_list
+ 
+          swiftformat --filelist "$modified_file_list" --lint --config .swiftformat --swiftversion 5 --reporter github-actions-log
+      - name: Linting Code
+        if: env.changed_files != ''
+        run: |
+          modified_files=$(cat "${{ github.workspace }}/modified_file_list")
+ 
+          swiftlint lint --config .swiftlint --reporter "github-actions-logging" $modified_files
