@@ -31,10 +31,10 @@ jobs:
  
           echo "${{ env.changed_files }}" > $modified_file_list
  
-          swiftformat --filelist "$modified_file_list" --lint --config .swiftformat --swiftversion 5 --reporter github-actions-log
+          swiftformat --filelist "$modified_file_list" --lint --config ${{ github.workspace }}/.swiftformat --swiftversion 5 --reporter github-actions-log
       - name: Linting Code
         if: env.changed_files != ''
         run: |
           modified_files=$(cat "${{ github.workspace }}/modified_file_list")
  
-          swiftlint lint --config .swiftlint --reporter "github-actions-logging" $modified_files
+          swiftlint lint --config ${{ github.workspace }}/.swiftlint --reporter "github-actions-logging" $modified_files
