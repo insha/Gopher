@@ -14,8 +14,10 @@ public final class RequestBuilder
     private var method: HTTPMethod
     private var endpoint: String
     private var timeout: TimeInterval
-    private var parameters: GopherContent
+    private var parameters: GopherQueryParameter
+    private var body: GopherContent
     private var headers: GopherHeader
+    private var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy
 
     public init()
     {
@@ -23,7 +25,9 @@ public final class RequestBuilder
         method = HTTPMethod.get
         timeout = 60
         headers = [:]
-        parameters = [:]
+        parameters = []
+        body = [:]
+        dateDecodingStrategy = .iso8601
         identifier = UUID().uuidString
         name = "[\(method.rawValue.uppercased())] \(endpoint.lowercased())"
     }
@@ -42,14 +46,14 @@ public final class RequestBuilder
         return self
     }
 
-    public func parameter(_ key: String, value: Any) -> Self
+    public func parameter(_ name: String, value: String) -> Self
     {
-        parameters[key] = value
+        parameters.append(URLQueryItem(name: name, value: value))
 
         return self
     }
 
-    public func parameters(_ value: GopherContent) -> Self
+    public func parameters(_ value: GopherQueryParameter) -> Self
     {
         guard !value.isEmpty
         else
@@ -89,6 +93,20 @@ public final class RequestBuilder
         return self
     }
 
+    public func content(_ value: GopherContent) -> Self
+    {
+        body = value
+
+        return self
+    }
+
+    public func date_decoding(_ strategy: JSONDecoder.DateDecodingStrategy) -> Self
+    {
+        dateDecodingStrategy = strategy
+
+        return self
+    }
+
     public func build() -> Request
     {
         guard !endpoint.isEmpty
@@ -101,6 +119,8 @@ public final class RequestBuilder
                               method: method,
                               headers: headers,
                               parameters: parameters,
+                              body: body,
+                              dateDecodingStrategy: dateDecodingStrategy,
                               timeout: timeout)
         return request
     }

@@ -26,13 +26,17 @@ public struct Request: NetworkRequest
     public var endpoint: String
     public var url: URL?
     public var timeout: TimeInterval
-    public var parameters: GopherContent
+    public var parameters: GopherQueryParameter
     public var headers: GopherHeader
+    public var body: GopherContent
+    public var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy
 
     public init(endpoint: String,
                 method: HTTPMethod,
                 headers: GopherHeader = [:],
-                parameters: GopherContent = [:],
+                parameters: GopherQueryParameter = [],
+                body: GopherContent = [:],
+                dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .iso8601,
                 timeout: TimeInterval = 60)
     {
         self.endpoint = endpoint
@@ -40,6 +44,8 @@ public struct Request: NetworkRequest
         self.timeout = timeout
         self.headers = headers
         self.parameters = parameters
+        self.body = body
+        self.dateDecodingStrategy = dateDecodingStrategy
 
         identifier = UUID().uuidString
         name = "[\(method.rawValue.uppercased())] \(endpoint.lowercased())"
